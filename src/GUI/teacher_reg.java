@@ -475,6 +475,7 @@ public class teacher_reg extends javax.swing.JFrame {
 
             if (fname.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please enter  First Name", "Warning", JOptionPane.WARNING_MESSAGE);
+                buttonGroup1.clearSelection();
             } else if (lname.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please enter  Last Name", "Warning", JOptionPane.WARNING_MESSAGE);
             } else if (email.isEmpty()) {

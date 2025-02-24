@@ -23,7 +23,6 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.MYSQL;
 
-
 /**
  *
  * @author HP
@@ -505,9 +504,9 @@ public class attendanse_mark extends javax.swing.JFrame {
             String onTime = jTextField3.getText();
             String monthId = jLabel6.getText();
 
-            MYSQL.executeIUD("INSERT INTO `teacher_attendanse` (`teacher_id`,`date`,`on_time` ,  `payment` , `on_attendanse_status` ,"
+            MYSQL.executeIUD("INSERT INTO `teacher_attendanse` (`teacher_id`,`date`,`on_time` ,  `attend` , `on_attendanse_status` ,"
                     + " `month_month_id` ) "
-                    + "VALUES('" + Teacherid + "' , '" + Date + "' , '" + onTime + "'  , '2000' , 'Attened' , '" + monthId + "'  ) ");
+                    + "VALUES('" + Teacherid + "' , '" + Date + "' , '" + onTime + "'  , 'attend' , 'Attened' , '" + monthId + "'  ) ");
             JOptionPane.showMessageDialog(this, "Mark Attendanse Successfully", "Warning", JOptionPane.WARNING_MESSAGE);
             reset();
 

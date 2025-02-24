@@ -28,37 +28,36 @@ public class salaryManagement extends javax.swing.JFrame {
     /**
      * Creates new form salaryManagement
      */
+    public static HashMap<String, Integer> monthMap = new HashMap();
+
     public salaryManagement() {
         initComponents();
         loadMonth();
+
         createCurrentMonthComboBox();
     }
-    
-  
-      public static JComboBox<String> createCurrentMonthComboBox() {
+
+    public static JComboBox<String> createCurrentMonthComboBox() {
         JComboBox<String> monthComboBox = new JComboBox<>();
         Locale locale = Locale.getDefault();
         Month currentMonth = LocalDate.now().getMonth();
-        
+
         monthComboBox.addItem(currentMonth.getDisplayName(TextStyle.FULL, locale));
-        
+
         return monthComboBox;
     }
-  
-    
-    private void loadMonth(){
+
+    private void loadMonth() {
         try {
             ResultSet rs = MYSQL.executeSearch("SELECT * FROM `month`");
             DefaultComboBoxModel model = (DefaultComboBoxModel) jComboBox1.getModel();
 
             Vector v = new Vector();
-           
-            v.add("Select Month");
 
             while (rs.next()) {
 
                 v.add(rs.getString("month_name"));
-                
+                monthMap.put(rs.getString("month_name"), rs.getInt("month_id"));
 
             }
 
@@ -145,6 +144,20 @@ public class salaryManagement extends javax.swing.JFrame {
         jLabel3.setText("Search ");
 
         jComboBox1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Month" }));
+        jComboBox1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jComboBox1MouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jComboBox1MousePressed(evt);
+            }
+        });
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel8.setText("Year");
@@ -325,12 +338,28 @@ public class salaryManagement extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField5ActionPerformed
 
+    private void jComboBox1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBox1MouseClicked
+
+    }//GEN-LAST:event_jComboBox1MouseClicked
+
+    private void jComboBox1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBox1MousePressed
+
+        
+
+
+    }//GEN-LAST:event_jComboBox1MousePressed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
+
         FlatMacLightLaf.setup();
+
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
