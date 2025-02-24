@@ -94,7 +94,7 @@ public class teacherAttendanseReports extends javax.swing.JFrame {
                 // Check if the ESC key is pressed
                 if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     reset();
-                    System.out.println("Hii");
+
                 }
             }
         });
@@ -159,6 +159,7 @@ public class teacherAttendanseReports extends javax.swing.JFrame {
         jComboBox1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Month" }));
 
+        jTable1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
@@ -394,7 +395,7 @@ public class teacherAttendanseReports extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-        
+
         String search = jTextField1.getText();
         if (search.isEmpty()) {
             loadTeacher();
