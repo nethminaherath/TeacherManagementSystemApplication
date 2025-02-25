@@ -85,6 +85,7 @@ public class attendanse_mark extends javax.swing.JFrame {
         jTextField3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jTextField3.setForeground(new java.awt.Color(0, 0, 204));
         jTextField3.setText("HH-mm");
+        jTextField3.setEditable(false);
 
         jLabel5.setBackground(new java.awt.Color(255, 255, 255));
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -94,6 +95,7 @@ public class attendanse_mark extends javax.swing.JFrame {
         jTextField6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jTextField6.setForeground(new java.awt.Color(255, 0, 51));
         jTextField6.setText("HH-mm");
+        jTextField6.setEditable(false);
 
         jButton2.setBackground(new java.awt.Color(204, 0, 51));
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -128,6 +130,7 @@ public class attendanse_mark extends javax.swing.JFrame {
         attenedDate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         attenedDate.setForeground(new java.awt.Color(102, 0, 102));
         attenedDate.setText("YYYY-MM-DD");
+        attenedDate.setEditable(false);
 
         jLabel10.setBackground(new java.awt.Color(255, 255, 255));
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N

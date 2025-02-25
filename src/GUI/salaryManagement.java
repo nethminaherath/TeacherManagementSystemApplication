@@ -277,6 +277,7 @@ public class salaryManagement extends javax.swing.JFrame {
         jLabel4.setText("                        Teacher's Name");
 
         jTextField2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jTextField2.setEditable(false);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setText("Payement");
@@ -295,6 +296,7 @@ public class salaryManagement extends javax.swing.JFrame {
                 jTextField3ActionPerformed(evt);
             }
         });
+        jTextField3.setEditable(false);
 
         jTextField4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jTextField4.addActionListener(new java.awt.event.ActionListener() {
@@ -302,6 +304,7 @@ public class salaryManagement extends javax.swing.JFrame {
                 jTextField4ActionPerformed(evt);
             }
         });
+        jTextField4.setEditable(false);
 
         jTextField5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jTextField5.addActionListener(new java.awt.event.ActionListener() {
@@ -309,6 +312,7 @@ public class salaryManagement extends javax.swing.JFrame {
                 jTextField5ActionPerformed(evt);
             }
         });
+        jTextField5.setEditable(false);
 
         jButton1.setBackground(new java.awt.Color(0, 153, 0));
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N

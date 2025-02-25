@@ -192,6 +192,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="HH-mm"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jTextField3.setEditable(false);"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
@@ -215,6 +218,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="HH-mm"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jTextField6.setEditable(false);"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="jButton2">
           <Properties>
@@ -290,6 +296,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="YYYY-MM-DD"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="attenedDate.setEditable(false);"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel10">
           <Properties>
