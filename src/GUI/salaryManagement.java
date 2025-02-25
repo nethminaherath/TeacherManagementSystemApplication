@@ -6,10 +6,13 @@ package GUI;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.mysql.cj.protocol.Resultset;
+import com.mysql.cj.protocol.x.ReusableOutputStream;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.HashMap;
 import java.util.Locale;
@@ -29,70 +32,81 @@ public class salaryManagement extends javax.swing.JFrame {
      * Creates new form salaryManagement
      */
     public static HashMap<String, Integer> monthMap = new HashMap();
+    
+    public static String getCurrentLocalDate() {
+        // Get the current local date
+        LocalDate currentDate = LocalDate.now();
 
+        // Define the format to output the date
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Return the formatted date
+        return currentDate.format(formatter);
+    }
+    
     public salaryManagement() {
         initComponents();
         loadMonth();
         loadTeacher();
-
+        
         createCurrentMonthComboBox();
     }
-
+    
     public static JComboBox<String> createCurrentMonthComboBox() {
         JComboBox<String> monthComboBox = new JComboBox<>();
         Locale locale = Locale.getDefault();
         Month currentMonth = LocalDate.now().getMonth();
-
+        
         monthComboBox.addItem(currentMonth.getDisplayName(TextStyle.FULL, locale));
-
+        
         return monthComboBox;
     }
-
+    
     private void loadTeacher() {
         try {
             ResultSet rs = MYSQL.executeSearch("SELECT * FROM `teacher` WHERE `teacher_status` = 'Active' ORDER BY `id` ASC ");
-
+            
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             model.setRowCount(0);
-
+            
             try {
                 while (rs.next()) {
-
+                    
                     Vector<String> v = new Vector();
-
+                    
                     v.add(rs.getString("id"));
                     String fname = rs.getString("first_name");
                     String lname = rs.getString("last_name");
                     v.add(fname + " " + lname);
-
+                    
                     model.addRow(v);
                     jTable1.setModel(model);
-
+                    
                 }
-
+                
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+    
     private void loadMonth() {
         try {
             ResultSet rs = MYSQL.executeSearch("SELECT * FROM `month`");
             DefaultComboBoxModel model = (DefaultComboBoxModel) jComboBox1.getModel();
-
+            
             Vector v = new Vector();
-
+            
             while (rs.next()) {
-
+                
                 v.add(rs.getString("month_name"));
                 monthMap.put(rs.getString("month_name"), rs.getInt("month_id"));
-
+                
             }
-
+            
             model.addAll(v);
             jComboBox1.setModel(model);
         } catch (Exception e) {
@@ -131,6 +145,7 @@ public class salaryManagement extends javax.swing.JFrame {
         jTextField4 = new javax.swing.JTextField();
         jTextField5 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -272,7 +287,6 @@ public class salaryManagement extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel7.setText("Attend Dates");
 
-        jTextField3.setBackground(new java.awt.Color(51, 204, 0));
         jTextField3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jTextField3.setForeground(new java.awt.Color(0, 0, 0));
         jTextField3.setOpaque(true);
@@ -300,6 +314,23 @@ public class salaryManagement extends javax.swing.JFrame {
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("SET PAYEMNT");
+        jButton1.setEnabled(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setBackground(new java.awt.Color(255, 0, 51));
+        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
+        jButton2.setText("Cancel");
+        jButton2.setVisible(false);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -308,31 +339,36 @@ public class salaryManagement extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField2)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
-                            .addComponent(jTextField4))
-                        .addGap(39, 39, 39)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField2)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(70, 70, 70)
+                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(14, 14, 14))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 57, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(30, 193, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(14, 14, 14)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(282, 282, 282)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(49, 49, 49))
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(49, 49, 49))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -344,15 +380,17 @@ public class salaryManagement extends javax.swing.JFrame {
                 .addGap(43, 43, 43)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -399,7 +437,7 @@ public class salaryManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1MouseClicked
 
     private void jComboBox1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBox1MousePressed
-
+        
 
     }//GEN-LAST:event_jComboBox1MousePressed
 
@@ -411,31 +449,31 @@ public class salaryManagement extends javax.swing.JFrame {
         String search = jTextField1.getText();
         if (search.isEmpty()) {
             loadTeacher();
-
+            
         } else {
-
+            
             try {
                 ResultSet rs = MYSQL.executeSearch("SELECT * FROM `teacher` WHERE `first_name` LIKE '" + search + "%' OR `last_name` LIKE '" + search + "%'"
                         + " AND `teacher_status` = 'Active' ");
                 DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
                 model.setRowCount(0);
-
+                
                 try {
                     while (rs.next()) {
                         Vector<String> v = new Vector();
-
+                        
                         v.add(rs.getString("id"));
                         String fname = rs.getString("first_name");
                         String lname = rs.getString("last_name");
                         v.add(fname + " " + lname);
-
+                        
                         model.addRow(v);
                         jTable1.setModel(model);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
+                
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -443,77 +481,151 @@ public class salaryManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1KeyReleased
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-
+        
         String year = jTextField6.getText();
         String Month = (String) jComboBox1.getSelectedItem();
-
+        
         if (evt.getClickCount() == 2 && year != null && Month != "Select Month") {
- 
+            
+            jButton2.setVisible(true);
             jTable1.setEnabled(false);
             int selectedRow = jTable1.getSelectedRow();
             String Teacherid = String.valueOf(jTable1.getValueAt(selectedRow, 0));
             String Teachername = String.valueOf(jTable1.getValueAt(selectedRow, 1));
-
+            
             jTextField2.setText(Teachername);
-
+            
             String monthname = String.valueOf(jComboBox1.getSelectedItem());
             int monthId = monthMap.get(monthname);
-
+            
             try {
-
-                if (monthId <= 9) {
-
-                    String date = (String) year + "-0" + monthId;
-
-                    ResultSet rs = MYSQL.executeSearch("SELECT * FROM `teacher_attendanse` WHERE `date` LIKE '" + date + "%' AND `teacher_id` = '" + Teacherid + "'  ");
-                    int rowCount = 0;
-                    while (rs.next()) {
-                        rowCount++;  // Increment count for each row in the ResultSet
-                    }
+                
+                ResultSet rs = MYSQL.executeSearch("SELECT * FROM `salarymanagement` WHERE `teacher_id` = '" + Teacherid + "' AND `month_month_id` = '" + monthId + "' AND `year` = '" + year + "'  ");
+                
+                if (rs.next()) {
                     
+                    jTextField4.setText(rs.getString("attend_dates"));
+                    jTextField5.setText(rs.getString("paid_salary"));
                     
-
-                    if (rowCount > 0) {
-                     String  rowString = String.valueOf(rowCount);
-                        jTextField4.setText(rowString);
-                        int payment = 2000 * rowCount;
-                        jTextField5.setText(String.valueOf(payment));
-                        jTextField3.setText("NOT PAID");
-                        
-                    }
+                    jTextField3.setBackground(new java.awt.Color(0, 153, 0));
+                    jTextField3.setText(rs.getString("status"));
+                    jTextField3.setBackground(Color.red);
                     
-                    
-
                 } else {
+                    try {
+                        if (monthId <= 9) {
+                            String date = year + "-0" + monthId;
+                            
+                            ResultSet makeSalaryRs = MYSQL.executeSearch("SELECT * FROM `teacher_attendanse` WHERE `teacher_id` = '" + Teacherid + "' AND `month_month_id` = '" + monthId + "' AND `date` LIKE '" + date + "%' ");
 
-                    String date = (String) year + "-" + monthId;
+                            // Use makeSalaryRs (not rs)
+                            int rowCount = 0;
+                            while (makeSalaryRs.next()) {
+                                rowCount++;
+                                
+                            }
+                            
+                            if (rowCount == 0) {
+                                JOptionPane.showMessageDialog(this, "No Attendanse Found", "Warning", JOptionPane.WARNING_MESSAGE);
+                                reset();
+                            } else {
+                                
+                                Double payment = (Double) 2000.0 * rowCount;
+                                
+                                jTextField4.setText(String.valueOf(rowCount));
+                                jTextField5.setText(String.valueOf(payment));
+                                jTextField3.setBackground(Color.green);
+                                jTextField3.setText("NOT PAID");
+                                jButton1.setEnabled(true);
+                            }
+                            
+                        } else {
+                            String date = year + "-" + monthId;
+                            ResultSet makeSalaryRs = MYSQL.executeSearch("SELECT * FROM `teacher_attendanse` WHERE `teacher_id` = '" + Teacherid + "'"
+                                    + " AND `month_month_id` = '" + monthId + "' AND `date` LIKE '" + date + "%' ");
 
-                    ResultSet rs = MYSQL.executeSearch("SELECT * FROM `teacher_attendanse` WHERE `date` LIKE '" + date + "%' AND `teacher_id` = '" + Teacherid + "'  ");
-                    if (rs.next()) {
-                        int rowCount = rs.getInt(1);  // Get the count from the first column
-                        System.out.println("Number of rows in search result: " + rowCount);
-                    } else {
-                        System.out.println("Erro");
+                            // Use makeSalaryRs (not rs)
+                            int rowCount = 0;
+                            while (makeSalaryRs.next()) {
+                                rowCount++;
+                            }
+                            if (rowCount == 0) {
+                                JOptionPane.showMessageDialog(this, "No Attendanse Found", "Warning", JOptionPane.WARNING_MESSAGE);
+                                reset();
+                            } else {
+                                
+                                Double payment = (Double) 2000.0 * rowCount;
+                                
+                                jTextField4.setText(String.valueOf(rowCount));
+                                jTextField5.setText(String.valueOf(payment));
+                                jTextField3.setBackground(Color.green);
+                                jTextField3.setText("NOT PAID");
+                                jButton1.setEnabled(true);
+                            }
+                            
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                    
                 }
-
+                
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            
         } else if (evt.getClickCount() == 2 && (year.isEmpty() || Month.equals(null))) {
             JOptionPane.showMessageDialog(this, "Please Select Month & Year Correctly", "Warning", JOptionPane.WARNING_MESSAGE);
             loadTeacher();
-
+            
         }
 
     }//GEN-LAST:event_jTable1MouseClicked
+    
+    private void reset() {
+        jTextField2.setText("");
+        jTextField1.setText("");
+        loadTeacher();
+        jTextField4.setText("");
+        jTextField5.setText("");
+        jTextField3.setText("");
+        jTextField3.setBackground(new java.awt.Color(255, 255, 255));
+        jButton2.setVisible(false);
+        jTable1.setEnabled(true);
+        
+    }
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        reset();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String formattedDate = getCurrentLocalDate();
+        int selectedRow = jTable1.getSelectedRow();
+        String Teacherid = String.valueOf(jTable1.getValueAt(selectedRow, 0));
+        String monthname = String.valueOf(jComboBox1.getSelectedItem());
+        String year = jTextField6.getText();
+        String attendDates = jTextField4.getText();
+        
+        int monthId = monthMap.get(monthname);
+        try {
+            
+            MYSQL.executeIUD("INSERT INTO `salarymanagement` (`teacher_id`,`month_month_id`,`full_Salary`,`paid_salary`,`status`,`paid_date`,`year`,`attend_dates`)"
+                    + " VALUES('" + Teacherid + "' , '" + monthId + "' , '" + jTextField5.getText() + "' , '" + jTextField5.getText() + "' , 'PAID' , '" + formattedDate + "' , '" + year + "' , '" + attendDates + "' ) ");
+            JOptionPane.showMessageDialog(this, "PAID SALARY SUCCESSFULLY", "Warning", JOptionPane.WARNING_MESSAGE);
+            jButton1.setEnabled(false);
+            reset();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Check The Year", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-
+        
         FlatMacLightLaf.setup();
 
 
@@ -527,6 +639,7 @@ public class salaryManagement extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
