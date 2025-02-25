@@ -347,8 +347,10 @@ public class teacherAttendanseReports extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-
+        
+        
         if (evt.getClickCount() == 2) {
+
             String year = jTextField2.getText();
             String combobox = (String) jComboBox1.getSelectedItem();
             int selectedRow = jTable1.getSelectedRow();
@@ -366,17 +368,23 @@ public class teacherAttendanseReports extends javax.swing.JFrame {
 
                 try {
                     ResultSet rs = MYSQL.executeSearch("SELECT * FROM `teacher_attendanse` WHERE `month_month_id` = '" + monthId + "' AND `teacher_id` = '" + Teacherid
-                            + "' ORDER BY `date` ASC  ");
+                            + "' AND `date` LIKE '" + year + "%' ORDER BY `date` ASC  ");
+                    if (rs.next()) {
+                        while (rs.next()) {
+                            Vector<String> vector = new Vector();
+                            vector.add(rs.getString("date"));
+                            vector.add(rs.getString("on_time"));
+                            vector.add(rs.getString("leave_time"));
 
-                    while (rs.next()) {
-                        Vector<String> vector = new Vector();
-                        vector.add(rs.getString("date"));
-                        vector.add(rs.getString("on_time"));
-                        vector.add(rs.getString("leave_time"));
-
-                        model.addRow(vector);
-                        jTable2.setModel(model);
+                            model.addRow(vector);
+                            jTable2.setModel(model);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No Data Found", "Warning", JOptionPane.WARNING_MESSAGE);
+                        jButton1.setVisible(false);
+                        reset();
                     }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
